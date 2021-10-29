@@ -1,0 +1,141 @@
+* {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+	font-family: Arial, Helvetica, sans-serif;
+}
+body {
+	padding: 20px;
+}
+input,
+textarea,
+button {
+	outline-style: none;
+	border: none;
+}
+
+/*----form------*/
+#formRegistration {
+	/*display: none;*/
+}
+.form {
+	width: 100%;
+	min-width: 300px;
+	max-width: 500px;
+	margin: 0 auto;
+	background-color: white;
+	padding: 20px 30px;
+	color: black;
+	border: 1px solid #b5b5b5;
+	border-radius: 5px;
+}
+.form#formUserInfo {
+	max-width: 700px;
+}
+.form__title {
+	text-align: center;
+	font-size: 24px;
+}
+.form__block {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+}
+
+.form__block > .form__item {
+	width: 49%;
+}
+
+.form__header {
+	display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+
+.form__item {
+	margin-top: 20px;
+}
+
+
+.form__label {
+	display: block;
+	font-size: 16px;
+	font-weight: bold;
+	position: relative;
+}
+.form__input {
+	display: block;
+	height: 50px;
+	margin-top: 5px;
+	padding: 5px;
+	width: 100%;
+	font-size: 16px;
+	border: none;
+	border-radius: 5px;
+	border: 1px solid #dfdfdf;
+	border-bottom: 1px solid grey;
+}
+.form__input:focus {
+	border-bottom: 1px solid #3fff00;
+	background-color: #effff0;
+}
+
+.form__prompt {
+	margin-top: 5px;
+	padding-left: 5px;
+	font-size: 11px;
+	color: grey;
+}
+
+.form__button {
+	margin: 20px auto;
+	width: 100%;
+	height: 50px;
+	background-color: green;
+	border-radius: 5px;
+	color: white;
+	text-transform: uppercase;
+	font-weight: bold;
+	transition: all 0.5s;
+	cursor: pointer;
+}
+.form__button:hover {
+	background-color: #005c00;
+}
+
+.form__header {
+	text-align: right;
+}
+.form__exit {
+	background: none;
+	border: none;
+	margin-left: 20px;
+	font-weight: bold;
+	cursor: pointer;
+}
+.form__exit:hover {
+	color: red;
+}
+
+::placeholder {
+	color: gray;
+}
+/*----------*/
+.label--error::after {
+	content: "Заполните поле";
+	position: absolute;
+	font-size: 11px;
+	top: 0;
+	right: 0;
+	color: red;
+}
+.input--error,
+.input--error:focus {
+	color: red;
+	border-color: red;
+	background-color: #ffefef;
+}
+.prompt--error {
+	color: red;
+}

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>js-ДЗ-15 (Использование Cookie) </title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+	<!-- форма регистрации -->
+	<form class="form" id="formRegistration" ation='' method="POST">
+		<div class="form__item">
+			<h1 class="form__title">Регистрация</h1>
+		</div>
+		<div class="form__item">
+			<label for="formEmail" class="form__label">E-mail*:</label>
+			<input type="email" id="formEmail" class="form__input _req" name="email" placeholder="Ваша почта*">
+			<p class="form__prompt">Например: Имя@почтовый ящик. Имя должно содержать не менее 3-х символов. Допускается
+				символ подчеркивания.</p>
+		</div>
+		<div class="form__item">
+			<label for="formPassword" class="form__label">Пароль*:</label>
+			<input type="password" id="formPassword" class="form__input _req" name="pasword">
+			<p class="form__prompt">Должен состоять из больших и маленьких букв латиницы, содержать цифры.<br>Длина не менее 6
+				символов</p>
+		</div>
+		<div class="form__item">
+			<label for="formRepeatPassword" class="form__label">Подтвердите пароль*:</label>
+			<input type="password" id="formRepeatPassword" class="form__input _req" name="repeatPassword">
+			<p class="form__prompt">Подтвержденный пароль должен совпадать с введенным паролем выше</p>
+		</div>
+		<button id="buttonRegistration" class="form__button">Зарегистрироваться</button>
+	</form>
+
+	<!-- форма информации -->
+	<form class="form" id="formUserInfo" ation='' method="POST" hidden>
+		<div class="form__header">
+			<p class="form__greeting">Здравствуйте, email@email.com</p>
+			<button id="userInfoExit" class="form__exit">Выход</button>
+		</div>
+		<div class="form__item">
+			<hr>
+		</div>
+		<div class="form__item">
+			<h1 class="form__title">Информация о пользователе</h1>
+		</div>
+		<div class="form__block">
+			<div class="form__item">
+				<label for="formFirstName" class="form__label">Имя*:</label>
+				<input type="text" id="formFirstName" class="form__input _req" name="first_name" placeholder="Ваше имя">
+				<p class="form__prompt"></p>
+			</div>
+			<div class="form__item">
+				<label for="formLasttName" class="form__label">Фамилия*:</label>
+				<input type="text" id="formLastName" class="form__input _req" name="last_name" placeholder="Ваша фамилия">
+				<p class="form__prompt"></p>
+			</div>
+		</div>
+		<div class="form__block">
+			<div class="form__item">
+				<label for="formYearBirth" class="form__label">Год рождения*:</label>
+				<input type="number" id="formYearBirth" class="form__input _req" name="year_birth"
+					placeholder="Ваш год рождения" min="1920" max="2020">
+				<p class="form__prompt">От 1920 до 2020</p>
+			</div>
+			<div class="form__item">
+				<label for="formGender" class="form__label">Ваш пол:</label>
+				<select id="formGender" class="form__input _req" name="gender">
+					<option selected>Мужской</option>
+					<option>Женский</option>
+				</select>
+				<p class="form__prompt"></p>
+			</div>
+		</div>
+		<div class="form__block">
+			<div class="form__item">
+				<label for="formTel" class="form__label">Телефон*:</label>
+				<input type="tel" id="formTel" class="form__input _req" name="first_tel" placeholder="Ваш телефон">
+				<p class="form__prompt">Например: +380501234567 (символ + и 12 цифр)</p>
+			</div>
+			<div class="form__item">
+				<label for="formSkype" class="form__label">Скайп(Skype):</label>
+				<input type="text" id="formSkype" class="form__input" name="skype" placeholder="Ваш скайп">
+				<p class="form__prompt">Символы: "a-z A-Z_.,-". Цифры от 0 до 9.<br>Всего от 6 до 32 символов</p>
+			</div>
+		</div>
+		<button id="buttonSaveUserInfo" class="form__button">Сохранить</button>
+	</form>
+
+
+	<script type="text/javascript">
+		//переменные	
+		let formRegistration = document.querySelector("#formRegistration");
+		let formUserInfo = document.querySelector("#formUserInfo");
+		let greeting = document.querySelector(".form__greeting");
+		//слушатели событий
+		document.addEventListener('DOMContentLoaded', checkReg);
+		document.getElementById('buttonRegistration').addEventListener('click', checkForm);
+		document.getElementById('buttonSaveUserInfo').addEventListener('click', checkForm);
+		formRegistration.addEventListener('input', checkInput);
+		formUserInfo.addEventListener('input', checkInput);
+		document.querySelector('#userInfoExit').addEventListener('click', userExit);
+
+		/*-----------------------------------------------------------------------------*/
+		//проверка формы
+		function checkForm(e) {
+			e.preventDefault();
+			let form = e.target.parentElement;
+			let countError = 0;
+			for (let elem of form.elements) {
+				if (!(elem.classList.contains("form__input"))) continue;
+				countError += (checkErrorElem(elem)) ? 1 : 0;//проверка инпута и сбор ошибок
+			};
+			if (countError == 0) {//если ошибок нет пишем куки 
+				let expDate = new Date();
+				expDate.setTime((new Date).getTime() + 60 * 1000 * 15);
+				if (form.id == "formRegistration") document.cookie = "userEmail=" + form.querySelector('#formEmail').value + ";expires=" + expDate.toGMTString() + ";path=/";
+				if (form.id == "formUserInfo") {
+					for (let elem of form.elements) {
+						if (!(elem.classList.contains("form__input"))) continue;
+						if (elem.value != '') {
+							document.cookie = elem.id + '=' + elem.value + ";expires=" + expDate.toGMTString() + ";path=/";
+						}
+					}
+				}
+				location.reload();//обновляем страницу
+			};
+		}
+		/*-----------------------------------------------------------------------------*/
+		function checkInput(e) {//проверка ввода данных в инпуты "на лету"
+			if (!(e.target.classList.contains("form__input"))) return;
+			checkErrorElem(e.target);
+		};
+		/*-----------------------------------------------------------------------------*/
+		//проверка конкретного инпута (вызов на стр.115 и стр.135)
+		function checkErrorElem(elem) {
+			let regEmail = /^[a-z0-9_]{3,}@[A-Z0-9_-]+\.+\.?[A-Z]{2,4}$/i;
+			let regUpperL = /[A-Z]+/;
+			let regLowerL = /[a-z]+/;
+			let regDigit = /[0-9]+/;
+			let regTel = /^\+\d{12}$/;
+			let regSkype = /^[a-zA-Z][a-zA-Z0-9_.,-]{5,31}$/;
+			let valueError = false;
+			let value = elem.value;
+			//проверка на заполненность
+			if (elem.classList.contains("_req") && elem.value.length == '') {
+				addClassError(elem.parentElement, true);
+				return true;
+			};
+			//проверка элементов формы регистрации
+			//проверка почты
+			if (elem.id == 'formEmail' && (!(regEmail.test(value)))) valueError = true;
+			//проверка пароля
+			if (elem.id == 'formPassword' && (!(value.length >= 6 && regUpperL.test(value) && regLowerL.test(value) &&
+				regDigit.test(value)))) valueError = true;
+			//проверка подтверждения пароля
+			if ((elem.id == 'formRepeatPassword') && ((value != document.getElementById("formPassword").value))) valueError = true;
+
+			//проверка формы информации о пользователе
+			//if ((elem.id == 'formFirstName')
+			//|| elem.id == 'formLastName')
+			if ((elem.id == 'formYearBirth') && ((+value) < 1920) || (+value > 2020)) valueError = true;
+			//if (elem.id == 'formGender') 
+			if (elem.id == 'formTel') valueError = !regTel.test(value);
+			if (elem.id == 'formSkype' && elem.value != '') valueError = !regSkype.test(value);
+			//если флаг ошибки = true, то подсвечиваем поле
+			if (valueError) {
+				addClassError(elem.parentElement);
+				return true;
+			} else {
+				removeClassError(elem.parentElement);
+				return false;
+			};
+		};
+		/*-----------------------------------------------------------------------------*/
+		//функции добавления и удаления классов ошибок
+		function addClassError(inputParent, empty = false) {
+			if (empty) inputParent.querySelector(".form__label").classList.add("label--error");
+			inputParent.querySelector(".form__input").classList.add("input--error");
+			inputParent.querySelector(".form__prompt").classList.add("prompt--error");
+		};
+		function removeClassError(inputParent) {
+			inputParent.querySelector(".form__label").classList.remove("label--error");
+			inputParent.querySelector(".form__input").classList.remove("input--error");
+			inputParent.querySelector(".form__prompt").classList.remove("prompt--error");
+		};
+		/*-----------------------------------------------------------------------------*/
+		//проверка куков при обновлении или загрузке страницы
+		function checkReg(e) {
+			//alert(e.target);
+			let cookie = document.cookie.split('; ');
+			let cookieObject = {};
+			for (var i = 0; i < cookie.length; i++) {
+				var cookieArr = cookie[i].split('=');
+				cookieObject[cookieArr[0]] = cookieArr[1];
+			}
+
+			if ('userEmail' in cookieObject) {
+				greeting.innerText = "Здравствуйте, " + cookieObject['userEmail'];
+				formRegistration.hidden = true;
+				formUserInfo.hidden = false;
+				for (let key in cookieObject) {
+					if (key == 'userEmail') continue;
+					document.getElementById(key).value = cookieObject[key];
+				}
+			} else {
+				formRegistration.hidden = false;
+				formUserInfo.hidden = true;
+			};
+		};
+		/*-----------------------------------------------------------------------------*/
+		//обработка нажатия выхода на форме информации о юзере
+		function userExit(e) {
+			e.preventDefault();
+			let cookie = document.cookie.split('; ');
+			let cookieObject = {};
+			for (var i = 0; i < cookie.length; i++) {
+				var cookieArr = cookie[i].split('=');
+				cookieObject[cookieArr[0]] = cookieArr[1];
+			};
+			let expDate = new Date();
+			expDate.setTime(expDate.getTime() - 1000);
+			for (let cookie in cookieObject) {
+				let expires = expDate.toGMTString();
+				document.cookie = cookie + '=' + '; expires=' + expires + '; path=/';
+			};
+			location.reload();
+		};
+
+	</script>
+
+</body>
+
+</html>
